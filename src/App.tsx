@@ -122,6 +122,9 @@ function App() {
                                 <li>
                                     <b>"내용을 모두에게 공개"</b>를 선택하면 이 페이지에서 누구나 편지의 내용을 볼 수 있습니다. 체크하지 않으면 저에게만 전달되고 공개되지 않습니다
                                 </li>
+                                <li>
+                                    정 무슨 내용을 써주면 좋을지 모르겠다면 <a href="https://docs.google.com/document/d/13z_FXz4ygipWeMBWqYkmvvyV_h3MdUmw86dM5NfkZoc/edit?usp=sharing">내용 가이드</a>에서 골라주세요
+                                </li>
                             </ul>
                         </div>
                     </Box>
