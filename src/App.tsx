@@ -33,14 +33,14 @@ function App() {
     const crossMark = String.fromCodePoint(0x274C);
 
     return (
-        <Box display="flex" flex={1} flexWrap="wrap" flexDirection="row">
-            <Box flex={1}>
+        <Box display="flex" height="100%" flexWrap="wrap" flexDirection="row">
+            <Box minWidth="300px">
                 <LetterList data={letters}/>
             </Box>
-            <Box flex={2}>
+            <Box display="flex" flex={1} minWidth="500px">
                 <LetterForm setFetch={setFetch}/>
             </Box>
-            <Box flex={1}>
+            <Box width="500px">
                 <h2>
                     편지 가이드
                 </h2>
