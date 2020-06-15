@@ -4,23 +4,9 @@ import axios from 'axios';
 import { LetterForm } from './components/LetterForm';
 import { AppBar, Box, createStyles, CssBaseline, IconButton, Theme, Toolbar, Typography } from '@material-ui/core';
 import { LetterList } from './components/LetterList';
-import { Letter } from './models/letter';
+import { Letter, parseLetter } from './models/letter';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-
-const parseLetter = (response: any): Letter => {
-    const letter = response;
-    if (typeof response.completed === "string") {
-        letter.completed = response.completed === "true";
-    }
-    if (typeof response.createdAt === "string") {
-        letter.createdAt = new Date(response.createdAt);
-    }
-    if (typeof response.updatedAt === "string") {
-        letter.updatedAt = new Date(response.updatedAt);
-    }
-    return letter as Letter;
-}
 
 const drawerWidth = 240;
 
@@ -71,7 +57,6 @@ function App() {
         if (fetch) {
             (async () => {
                 const result = await axios.get('/api/letter');
-                console.log(result.data);
                 setLetters(result.data.map(parseLetter));
             })();
             setFetch(false);

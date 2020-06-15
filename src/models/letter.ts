@@ -6,4 +6,23 @@ export interface Letter {
     completed: boolean;
     createdAt: Date;
     updatedAt: Date;
+    isPublic: boolean;
 }
+
+export const parseLetter = (response: any): Letter => {
+    const letter = response;
+    if (typeof response.completed === "string") {
+        letter.completed = response.completed === "true";
+    }
+    if (typeof response.isPublic === "string") {
+        letter.isPublic = response.isPublic === "true";
+    }
+    if (typeof response.createdAt === "string") {
+        letter.createdAt = new Date(response.createdAt);
+    }
+    if (typeof response.updatedAt === "string") {
+        letter.updatedAt = new Date(response.updatedAt);
+    }
+    return letter as Letter;
+}
+

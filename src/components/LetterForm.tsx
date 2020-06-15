@@ -8,8 +8,8 @@ interface LetterFormProps {
 export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
     const { setFetch } = props;
 
-    const [title, setTitle] = useState('');
-    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [title, setTitle] = useState<string | null>(null);
+    const handleTitleChange = (event: any) => {
         setTitle(event.target.value);
     };
 
@@ -18,8 +18,8 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
         setContent(event.target.value);
     };
 
-    const [sender, setSender] = useState('');
-    const handleSenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [sender, setSender] = useState<string | null>(null);
+    const handleSenderChange = (event: any) => {
         setSender(event.target.value);
     };
 
@@ -29,35 +29,50 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
     };
 
     const sendLetter = () => {
-        axios.post('/api/letter', {
-            title,
-            content,
-            sender,
-            isPublic,
-        })
-            .then(res => {
-                console.log(res);
-                setFetch(true);
+        if (!title || !sender) {
+            if (!title) {
                 setTitle('');
-                setContent('');
+            }
+            if (!sender) {
+                setSender('');
+            }
+        } else {
+            axios.post('/api/letter', {
+                title,
+                content,
+                sender,
+                isPublic,
             })
-            .catch(console.error);
+                .then(res => {
+                    console.log(res);
+                    setFetch(true);
+                    setTitle(null);
+                    setContent('');
+                })
+                .catch(console.error);
+        }
     };
 
     return (
         <form>
             <Box display="flex" alignItems="flex-end">
                 <TextField
-                    value={title}
+                    value={title || ''}
                     margin="normal"
                     onChange={handleTitleChange}
+                    onFocus={handleTitleChange}
                     label="제목"
+                    error={title === ''}
+                    helperText={title === '' && "제목을 적어주세요"}
                 />
                 <TextField
-                    value={sender}
+                    value={sender || ''}
                     margin="normal"
                     onChange={handleSenderChange}
+                    onFocus={handleSenderChange}
                     label="작성자"
+                    error={sender === ''}
+                    helperText={sender === '' && "이름을 적어주세요"}
                 />
                 <FormControlLabel
                     control={

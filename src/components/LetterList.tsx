@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import {
-    createStyles, Divider, Drawer, Hidden,
+    createStyles, Divider, Drawer, Hidden, Link,
     List,
     ListItem,
     ListItemText,
@@ -9,7 +10,8 @@ import {
     Typography, useTheme
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Letter } from '../models/letter';
+import { Letter, parseLetter } from '../models/letter';
+import { LetterViewDialog } from './LetterViewDialog';
 
 const drawerWidth = 240;
 
@@ -61,6 +63,16 @@ export const LetterList: React.FunctionComponent<LetterListProps> = (props) => {
     const classes = useStyles();
     const theme = useTheme();
 
+    const [letter, setLetter] = useState<Letter | undefined>(undefined);
+    const handleClickOpen = (letter: Letter) => {
+        axios.get(`/api/letter/${letter._id}`)
+            .then(resp => setLetter(parseLetter(resp.data)))
+            .catch(console.error);
+    };
+    const handleClose = () => {
+        setLetter(undefined);
+    };
+
     const checkMark = String.fromCodePoint(0x2705);
     const crossMark = String.fromCodePoint(0x274C);
     const groups = props.data.reduce((groups, elem) => {
@@ -94,9 +106,15 @@ export const LetterList: React.FunctionComponent<LetterListProps> = (props) => {
                             <ListItem
                                 key={data._id}
                             >
-                                <ListItemText
-                                    primary={`${data.title} ${data.completed ? checkMark : crossMark}`}
-                                />
+                                {data.isPublic ?
+                                    <Link onClick={() => handleClickOpen(data)}>
+                                        <b>{data.title} {data.completed ? checkMark : crossMark}</b>
+                                    </Link>
+                                    :
+                                    <Typography>
+                                        {data.title} {data.completed ? checkMark : crossMark}
+                                    </Typography>
+                                }
                             </ListItem>
                         </Tooltip>
                     ))}
@@ -104,36 +122,40 @@ export const LetterList: React.FunctionComponent<LetterListProps> = (props) => {
             </React.Fragment>
         );
     })
+
     return (
-        <nav className={classes.drawer} aria-label="mailbox folders">
-            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-            <Hidden smUp implementation="css">
-                <Drawer
-                    variant="temporary"
-                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-            </Hidden>
-            <Hidden xsDown implementation="css">
-                <Drawer
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    variant="permanent"
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Hidden>
-        </nav>
+        <React.Fragment>
+            <LetterViewDialog onClose={handleClose} letter={letter}/>
+            <nav className={classes.drawer} aria-label="mailbox folders">
+                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                <Hidden smUp implementation="css">
+                    <Drawer
+                        variant="temporary"
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                <Hidden xsDown implementation="css">
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        variant="permanent"
+                        open
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+            </nav>
+        </React.Fragment>
     );
 }
