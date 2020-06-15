@@ -16,12 +16,17 @@ export function LetterViewDialog(props: LetterViewDialogProps) {
 
     return (
         <Dialog onClose={handleClose} aria-labelledby="letter-dialog-title" open={open}>
-            <DialogTitle id="letter-dialog-title">{letter && letter.title}</DialogTitle>
-            <DialogContent dividers>
-                <Typography gutterBottom>
-                    {letter && letter.content}
-                </Typography>
-            </DialogContent>
+            {letter &&
+            <React.Fragment>
+                <DialogTitle id="letter-dialog-title">
+                    {letter.title} - {letter.sender}
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        {letter.content}
+                    </Typography>
+                </DialogContent>
+            </React.Fragment>}
         </Dialog>
     );
 }
