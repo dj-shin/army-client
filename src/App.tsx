@@ -37,7 +37,7 @@ function App() {
             <Box minWidth="300px">
                 <LetterList data={letters}/>
             </Box>
-            <Box display="flex" flex={1} minWidth="500px">
+            <Box display="flex" flex={1} minWidth="400px">
                 <LetterForm setFetch={setFetch}/>
             </Box>
             <Box width="500px">
