@@ -21,7 +21,7 @@ function App() {
     useEffect(() => {
         if (fetch) {
             (async () => {
-                const result = await axios.get('/letter');
+                const result = await axios.get('/api/letter');
                 console.log(result.data);
                 setLetters(result.data.map(parseLetter));
             })();
