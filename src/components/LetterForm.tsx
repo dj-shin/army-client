@@ -28,14 +28,27 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
         setPublic(event.target.checked);
     };
 
+    const titleError = () => {
+        if (title === '') {
+            return "제목을 적어주세요";
+        }
+        if (typeof title === "string" && title.length > 30) {
+            return "제목은 30자를 초과할 수 없습니다";
+        }
+        return null;
+    };
+    const senderError = () => {
+        if (sender === '') {
+            return "이름을 적어주세요";
+        }
+        if (typeof sender === "string" && sender.length > 10) {
+            return "이름은 10자를 초과할 수 없습니다";
+        }
+        return null;
+    };
+
     const sendLetter = () => {
-        if (!title || !sender) {
-            if (!title) {
-                setTitle('');
-            }
-            if (!sender) {
-                setSender('');
-            }
+        if (titleError() || senderError()) {
         } else {
             axios.post('/api/letter', {
                 title,
@@ -62,8 +75,8 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
                     onChange={handleTitleChange}
                     onFocus={handleTitleChange}
                     label="제목"
-                    error={title === ''}
-                    helperText={title === '' && "제목을 적어주세요"}
+                    error={titleError() !== null}
+                    helperText={titleError()}
                 />
                 <TextField
                     value={sender || ''}
@@ -71,8 +84,8 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
                     onChange={handleSenderChange}
                     onFocus={handleSenderChange}
                     label="작성자"
-                    error={sender === ''}
-                    helperText={sender === '' && "이름을 적어주세요"}
+                    error={senderError() !== null}
+                    helperText={senderError()}
                 />
                 <FormControlLabel
                     control={
