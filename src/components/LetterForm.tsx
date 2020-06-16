@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Box, Button, Checkbox, Collapse, FormControlLabel, IconButton, TextField } from '@material-ui/core';
-import Alert from '@material-ui/lab/alert';
+import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import CloseIcon from '@material-ui/icons/Close';
 
