@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LetterForm } from './components/LetterForm';
-import { AppBar, Box, createStyles, CssBaseline, IconButton, Theme, Toolbar, Typography } from '@material-ui/core';
+import {
+    AppBar,
+    Box,
+    createStyles,
+    CssBaseline,
+    IconButton, Link,
+    Theme,
+    Toolbar,
+    Typography
+} from '@material-ui/core';
 import { LetterList } from './components/LetterList';
 import { Letter, parseLetter } from './models/letter';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 const drawerWidth = 240;
 
@@ -13,6 +23,17 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
+        },
+        footer: {
+            position: 'fixed',
+            bottom: 0,
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.grey.A100,
+            width: '100%',
+            textAlign: 'center'
+        },
+        footerText: {
+            color: theme.palette.primary.contrastText,
         },
         tooltip: {
             fontSize: theme.typography.pxToRem(15),
@@ -43,6 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
+            paddingBottom: theme.spacing(10),
         },
     }),
 );
@@ -129,6 +151,20 @@ function App() {
                     </Box>
                 </Box>
             </main>
+            <Box className={classes.footer}>
+                <Link
+                    href="https://github.com/dj-shin/army-client"
+                >
+                    <GitHubIcon fontSize="large" color="action"/>
+                </Link>
+                <Typography>
+                    Inspired by <Link
+                    className={classes.footerText}
+                    href="https://calofmijuck.tistory.com/m/18?fbclid=IwAR16UKTjjr8xQA0g_ctkdOO9A4DdrCuEjdQLqJ7hXNNQg--IzFPaAPe9fM8">
+                    calofmijuck
+                </Link>
+                </Typography>
+            </Box>
         </div>
     );
 }
