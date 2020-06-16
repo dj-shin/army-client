@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
 import axios from 'axios';
 import { LetterForm } from './components/LetterForm';
 import { AppBar, Box, createStyles, CssBaseline, IconButton, Theme, Toolbar, Typography } from '@material-ui/core';
