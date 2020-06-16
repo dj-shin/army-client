@@ -64,7 +64,10 @@ const useStyles = makeStyles((theme: Theme) =>
         content: {
             flexGrow: 1,
             padding: theme.spacing(3),
-            paddingBottom: theme.spacing(10),
+            paddingBottom: theme.spacing(14),
+        },
+        github: {
+            color: 'white',
         },
     }),
 );
@@ -208,11 +211,11 @@ function App() {
                     </Box>
                 </Box>
             </main>
-            <Box className={classes.footer}>
+            <Box className={classes.footer} p={1}>
                 <Link
                     href="https://github.com/dj-shin/army-client"
                 >
-                    <GitHubIcon fontSize="large" color="action"/>
+                    <GitHubIcon fontSize="large" className={classes.github}/>
                 </Link>
                 <Typography>
                     Inspired by <Link
