@@ -82,7 +82,11 @@ function App() {
                 .then(resp => setLetters(resp.data.map(parseLetter)))
                 .catch(error => {
                     if (error.response) {
-                        setListError(`응답: ${error.response.status}`);
+                        let message = '';
+                        if (error.response.data && error.response.data.message) {
+                            message = ` - ${error.response.data.message}`;
+                        }
+                        setListError(`응답: ${error.response.status}${message}`);
                         console.log(error.response.status);
                         console.log(error.response.headers);
                     } else if (error.request) {

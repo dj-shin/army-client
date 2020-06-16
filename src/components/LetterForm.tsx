@@ -75,8 +75,12 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
                 })
                 .catch(error => {
                     if (error.response) {
+                        let message = '';
+                        if (error.response.data && error.response.data.message) {
+                            message = ` - ${error.response.data.message}`;
+                        }
                         setOpen(true);
-                        setErrorMessage(`응답: ${error.response.status}`);
+                        setErrorMessage(`응답: ${error.response.status}${message}`);
                         console.log(error.response.data);
                         console.log(error.response.status);
                         console.log(error.response.headers);
