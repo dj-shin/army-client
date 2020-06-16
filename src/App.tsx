@@ -180,6 +180,9 @@ function App() {
                             </h2>
                             <ul>
                                 <li>
+                                    편지 작성은 입소 일주일 이후 (6/25) 정도부터 가능해집니다
+                                </li>
+                                <li>
                                     이 사이트는 <a href="https://thecamp.or.kr/">더캠프</a>를 통해 인터넷 편지를 전달합니다
                                 </li>
                                 <li>
