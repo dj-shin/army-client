@@ -92,6 +92,7 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
                         console.log(error);
                     }
                     console.log(error.config);
+                    setFetch(true);
                 });
         }
     };
