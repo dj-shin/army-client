@@ -5,11 +5,11 @@ import {
     AppBar,
     Box,
     createStyles,
-    CssBaseline,
+    CssBaseline, Drawer, Hidden,
     IconButton, Link,
     Theme,
     Toolbar,
-    Typography
+    Typography, useTheme
 } from '@material-ui/core';
 import { LetterList } from './components/LetterList';
 import { Letter, parseLetter } from './models/letter';
@@ -74,12 +74,24 @@ function App() {
     const [letters, setLetters] = useState<Letter[]>([]);
     const [fetch, setFetch] = useState(true);
 
+    const [listError, setListError] = useState<string | null>(null);
+
     useEffect(() => {
         if (fetch) {
-            (async () => {
-                const result = await axios.get('/api/letter');
-                setLetters(result.data.map(parseLetter));
-            })();
+            axios.get('/api/letter')
+                .then(resp => setLetters(resp.data.map(parseLetter)))
+                .catch(error => {
+                    if (error.response) {
+                        setListError(`편지 목록을 가져올 수 없습니다 (${error.response.status})`);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    } else {
+                        console.error(error);
+                    }
+                    console.log(error.config);
+                });
             setFetch(false);
         }
     }, [fetch]);
@@ -92,6 +104,39 @@ function App() {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const theme = useTheme();
+    const defaultList = (message: string) => (
+        <nav className={classes.drawer} aria-label="mailbox folders">
+            <Hidden smUp implementation="css">
+                <Drawer
+                    variant="temporary"
+                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    {message}
+                </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+                <Drawer
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    variant="permanent"
+                    open
+                >
+                    {message}
+                </Drawer>
+            </Hidden>
+        </nav>
+    );
 
     return (
         <div className={classes.root}>
@@ -112,7 +157,10 @@ function App() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <LetterList data={letters} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/>
+            {listError === null ?
+                <LetterList data={letters} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/> :
+                defaultList(listError)
+            }
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <Box display="flex" height="100%" flexWrap="wrap" flexDirection="row">
