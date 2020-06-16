@@ -82,12 +82,14 @@ function App() {
                 .then(resp => setLetters(resp.data.map(parseLetter)))
                 .catch(error => {
                     if (error.response) {
-                        setListError(`편지 목록을 가져올 수 없습니다 (${error.response.status})`);
+                        setListError(`응답: ${error.response.status}`);
                         console.log(error.response.status);
                         console.log(error.response.headers);
                     } else if (error.request) {
+                        setListError(`응답 없음`);
                         console.log(error.request);
                     } else {
+                        setListError(`요청 실패`);
                         console.error(error);
                     }
                     console.log(error.config);
@@ -159,7 +161,7 @@ function App() {
             </AppBar>
             {listError === null ?
                 <LetterList data={letters} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle}/> :
-                defaultList(listError)
+                defaultList(`편지를 가져올 수 없습니다 (${listError})`)
             }
             <main className={classes.content}>
                 <div className={classes.toolbar} />

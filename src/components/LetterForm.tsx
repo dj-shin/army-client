@@ -1,6 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Box, Button, Checkbox, FormControlLabel, TextField } from '@material-ui/core';
+import { Box, Button, Checkbox, Collapse, FormControlLabel, IconButton, TextField } from '@material-ui/core';
+import Alert from '@material-ui/lab/alert';
 import axios from 'axios';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface LetterFormProps {
     setFetch: Dispatch<SetStateAction<boolean>>
@@ -47,8 +49,17 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
         return null;
     };
 
+    const [open, setOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState('');
+
     const sendLetter = () => {
-        if (titleError() || senderError()) {
+        if (titleError() || senderError() || !title || !sender) {
+            if (!title) {
+                setTitle('');
+            }
+            if (!sender) {
+                setSender('');
+            }
         } else {
             axios.post('/api/letter', {
                 title,
@@ -62,12 +73,46 @@ export const LetterForm: React.FunctionComponent<LetterFormProps> = (props) => {
                     setTitle(null);
                     setContent('');
                 })
-                .catch(console.error);
+                .catch(error => {
+                    if (error.response) {
+                        setOpen(true);
+                        setErrorMessage(`응답: ${error.response.status}`);
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        setErrorMessage(`응답 없음`);
+                        console.log(error.request);
+                    } else {
+                        setErrorMessage(`요청 실패`);
+                        console.log(error);
+                    }
+                    console.log(error.config);
+                });
         }
     };
 
     return (
         <form>
+            <Collapse in={open}>
+                <Alert
+                    severity="error"
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setOpen(false);
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                >
+                    편지를 전송하는데 실패했습니다 ({errorMessage})
+                </Alert>
+            </Collapse>
             <Box display="flex" alignItems="flex-end">
                 <TextField
                     value={title || ''}
