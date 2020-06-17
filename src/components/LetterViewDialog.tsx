@@ -14,6 +14,10 @@ export function LetterViewDialog(props: LetterViewDialogProps) {
         onClose();
     };
 
+    const body = letter ? letter.content.split('\n').map((v, idx) => (
+      <Typography gutterBottom key={idx}>{v}</Typography>
+    )) : undefined;
+
     return (
         <Dialog onClose={handleClose} aria-labelledby="letter-dialog-title" open={open}>
             {letter &&
@@ -22,9 +26,7 @@ export function LetterViewDialog(props: LetterViewDialogProps) {
                     {letter.title} - {letter.sender}
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Typography gutterBottom>
-                        {letter.content}
-                    </Typography>
+                    {body}
                 </DialogContent>
             </React.Fragment>}
         </Dialog>
