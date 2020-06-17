@@ -12,10 +12,10 @@ export interface Letter {
 export const parseLetter = (response: any): Letter => {
     const letter = response;
     if (typeof response.completed === "string") {
-        letter.completed = response.completed === "true";
+        letter.completed = response.completed.toLowerCase() === "true";
     }
     if (typeof response.isPublic === "string") {
-        letter.isPublic = response.isPublic === "true";
+        letter.isPublic = response.isPublic.toLowerCase() === "true";
     }
     if (typeof response.createdAt === "string") {
         letter.createdAt = new Date(response.createdAt);
