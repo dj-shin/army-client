@@ -105,6 +105,13 @@ function App() {
         }
     }, [fetch]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setFetch(true);
+        }, 1000 * 60);
+        return () => clearInterval(interval);
+    }, []);
+
     const checkMark = String.fromCodePoint(0x2705);
     const crossMark = String.fromCodePoint(0x274C);
 
